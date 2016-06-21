@@ -1,3 +1,5 @@
+Tutorial's chart of file structure
+
 - app/
 ----- models/
 ---------- bear.js  //our bear model
