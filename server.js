@@ -13,10 +13,23 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;        // set our port
 
-var mongoose   = require('mongoose');
-mongoose.connect('mongodb://node:node@novus.modulusmongo.net:27017/Iganiq8o'); // connect to our database
+var mysql = require("mysql");
 
-var Bear     = require('./app/models/bear');
+var con = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "Dragom765",
+	db: "db"
+});
+
+con.connect( function(err){
+	if(err)
+		throw err;
+	else
+		console.log("You're connected.");
+});
+
+var Bears     = require('./app/models/bear');
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -43,17 +56,19 @@ router.route('/bears')
     // create a bear (accessed at POST http://localhost:8080/api/bears)
     .post(function(req, res) {
         
-        var bear = new Bear();      // create a new instance of the Bear model
+        var bear = new Bears();      // create a new instance of the Bear model
         bear.name = req.body.name;  // set the bears name (comes from the request)
-
+//console.log("got here");
         // save the bear and check for errors
-        bear.save(function(err) {
-            if (err)
-                res.send(err);
+        con.query("INSERT INTO bears SET ?", bear, function(err, res) {
+            if (err){
+//				console.log("got here");    
+				res.send(err); /*this error appears to be being thrown*/
+			}
 
             res.json({ message: 'Bear created!' });
         });
-        
+
     });
 
 // REGISTER OUR ROUTES -------------------------------
