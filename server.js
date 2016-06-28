@@ -19,7 +19,7 @@ var con = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "Dragom765",
-	db: "db"
+	database: "db"
 });
 
 con.connect( function(err){
@@ -44,7 +44,7 @@ router.use(function(req, res, next) {
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
+    res.json({ message: 'Hooray! Welcome to our api!' });   
 });
 
 // more routes for our API will happen here
@@ -59,15 +59,16 @@ router.route('/bears')
         var bear = new Bears();      // create a new instance of the Bear model
         bear.name = req.body.name;  // set the bears name (comes from the request)
 //console.log("got here");
+
         // save the bear and check for errors
         con.query("INSERT INTO bears SET ?", bear, function(err, res) {
             if (err){
-//				console.log("got here");    
-				res.send(err); /*this error appears to be being thrown*/
+				console.log(err.message);    
+//				res.send(err); /*this error appears to be being thrown*/
 			}
 
-            res.json({ message: 'Bear created!' });
         });
+        res.json({ message: 'Bear created!' });
 
     });
 
