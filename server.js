@@ -13,10 +13,23 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;        // set our port
 
-var mongoose   = require('mongoose');
-mongoose.connect('mongodb://node:node@novus.modulusmongo.net:27017/Iganiq8o'); // connect to our database
+var mysql = require("mysql");
 
-var Bear     = require('./app/models/bear');
+var con = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "Dragom765",
+	database: "db"
+});
+
+con.connect( function(err){
+	if(err)
+		throw err;
+	else
+		console.log("You're connected.");
+});
+
+var Bears     = require('./app/models/bear');
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -31,7 +44,7 @@ router.use(function(req, res, next) {
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
+    res.json({ message: 'Hooray! Welcome to our api!' });   
 });
 
 // more routes for our API will happen here
@@ -43,17 +56,20 @@ router.route('/bears')
     // create a bear (accessed at POST http://localhost:8080/api/bears)
     .post(function(req, res) {
         
-        var bear = new Bear();      // create a new instance of the Bear model
+        var bear = new Bears();      // create a new instance of the Bear model
         bear.name = req.body.name;  // set the bears name (comes from the request)
+//console.log("got here");
 
         // save the bear and check for errors
-        bear.save(function(err) {
-            if (err)
-                res.send(err);
+        con.query("INSERT INTO bears SET ?", bear, function(err, res) {
+            if (err){
+				console.log(err.message);    
+//				res.send(err); /*this error appears to be being thrown*/
+			}
 
-            res.json({ message: 'Bear created!' });
         });
-        
+        res.json({ message: 'Bear created!' });
+
     });
 
 // REGISTER OUR ROUTES -------------------------------
