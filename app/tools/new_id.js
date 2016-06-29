@@ -15,15 +15,15 @@ module.exports = {
 	
 	
 	create: function() {		//creates an ID tag in hexidecimal form
-	var hexNum;
-	var digit = 0;
-	for(i = 1; i < 20; i++){
-		digit += (digit * 16) + Math.round(Math.random() * 16);
+		var hexNum;
+		var digit = 0;
+		for(i = 1; i < 20; i++){
+			digit += (digit * 16) + Math.round(Math.random() * 16);
 //when converted, this will be the same as (1*10) + 4 to make 14, just in base-16 instead of base-10
-	};
-	hexNum = digit.toString(16);
-	return hexNum;
-	},
+		};
+		hexNum = digit.toString(16);
+		return hexNum;
+	}//,
 /*
 	match: function () {		//checks if id already exists
 		for(i = 0; i < bears_id.length; i++){
@@ -49,4 +49,4 @@ module.exports = {
 		return new_id;
 	}
 */
-}
+};
