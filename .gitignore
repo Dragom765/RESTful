@@ -1,3 +1,7 @@
+# ignore the npm modules updates
+node_modules/*
+
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
